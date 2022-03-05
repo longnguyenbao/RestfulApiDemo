@@ -25,6 +25,10 @@ SECRET_KEY = 'django-insecure-_74-_um5*)u&iymo0^!m11)g*sz*67xxm!c@055#&i=1yxf0j2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+MEDIA_ROOT = '%s/courses/static/' % BASE_DIR
+
+CKEDITOR_UPLOAD_PATH = "images/lessons/"
+
 ALLOWED_HOSTS = []
 
 
@@ -37,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'courses',
+    'courses.apps.CoursesConfig',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
