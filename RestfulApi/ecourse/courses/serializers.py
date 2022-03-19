@@ -1,4 +1,4 @@
-from .models import Category, Course, Lesson
+from .models import Category, Course, Lesson, Tag, User, Comment
 from rest_framework import serializers
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -22,8 +22,16 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ['id', 'subject', 'image', 'created_date', 'category_id']
 
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name']
+
+
 class LessonSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField(source='image')
+    tags = TagSerializer(many=True)
 
     def get_image(self, obj):
         request = self.context['request']
@@ -34,4 +42,30 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ['id', 'subject', 'image', 'course_id']
+        fields = ['id', 'subject', 'image', 'course_id', 'created_date', 'updated_date', 'tags']
+
+
+class LessonDetailSerializer(LessonSerializer):
+    class Meta:
+        model = LessonSerializer.Meta.model
+        fields = LessonSerializer.Meta.fields + ['content']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['pk', 'username', 'first_name', 'last_name']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'created_date', 'updated_date', 'user']
+
+
+class CreateCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['content', 'lesson', 'user']
