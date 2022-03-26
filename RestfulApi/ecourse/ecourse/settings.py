@@ -20,19 +20,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_74-_um5*)u&iymo0^!m11)g*sz*67xxm!c@055#&i=1yxf0j2'
+SECRET_KEY = 'django-insecure-sg_&boz2ek6dt5)n_wvzsm^w)x=tqxr1mhmw%pp85((t%v9jr#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-MEDIA_ROOT = '%s/courses/static/' % BASE_DIR
-
-CKEDITOR_UPLOAD_PATH = "images/lessons/"
 
 ALLOWED_HOSTS = []
 
 
 # Application definition
+
+MEDIA_ROOT = '%s/courses/static/' % BASE_DIR
+
+CKEDITOR_UPLOAD_PATH = "images/ckeditor/"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -47,14 +47,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'debug_toolbar',
-    'oauth2_provider',
+    'oauth2_provider'
 ]
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-    )
-}
 
 STATIC_URL = '/static/'
 
@@ -66,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 INTERNAL_IPS = [
@@ -74,6 +68,12 @@ INTERNAL_IPS = [
 ]
 
 ROOT_URLCONF = 'ecourse.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 
 TEMPLATES = [
     {
@@ -99,11 +99,11 @@ WSGI_APPLICATION = 'ecourse.wsgi.application'
 
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'coursedb',
-    'USER': 'root',
-    'PASSWORD': '12345678',
-    'HOST': '' # mặc định localhost
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'coursedb',
+        'USER': 'root',
+        'PASSWORD': '12345678',
+        'HOST': '' # mặc định localhost
     }
 }
 

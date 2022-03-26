@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from ckeditor.fields import RichTextField
 
-# Create your models here.
+
 class User(AbstractUser):
-    pass
+    avatar = models.ImageField(null=True, upload_to='users/%Y/%m')
 
 
 class ModelBase(models.Model):
@@ -25,9 +25,9 @@ class Category(ModelBase):
 
 class Course(ModelBase):
     subject = models.CharField(max_length=255)
-    description =models.TextField(null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to='course/%Y%m')
-    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
+    description = RichTextField()
+    image = models.ImageField(null=True, blank=True, upload_to='courses/%Y/%m')
+    category = models.ForeignKey(Category, related_name="courses", null=True, on_delete=models.SET_NULL)
 
     class Meta:
         unique_together = ('subject', 'category')
@@ -39,19 +39,19 @@ class Course(ModelBase):
 class Lesson(ModelBase):
     subject = models.CharField(max_length=255)
     content = RichTextField()
-    image = models.ImageField(null=True, blank=True, upload_to='course/%Y%m')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons', related_query_name='my_lesson')
+    image = models.ImageField(null=True, upload_to='lessons/%Y/%m')
+    course = models.ForeignKey(Course,
+                               related_name='lessons',
+                               related_query_name='my_lesson',
+                               on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag')
-
-    class Meta:
-        unique_together = ('subject', 'course')
 
     def __str__(self):
         return self.subject
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+class Tag(ModelBase):
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -64,3 +64,20 @@ class Comment(ModelBase):
 
     def __str__(self):
         return self.content
+
+
+class ActionBase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+        unique_together = ('user', 'lesson')
+
+
+class Like(ActionBase):
+    active = models.BooleanField(default=False)
+
+
+class Rating(ActionBase):
+    rate = models.SmallIntegerField(default=0)
